@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test HTML</title>
+</head>
+<body>
+    <h1>This is a test page with link & form</h1>
+    <div>
+        <a href="#" id="dialog">test dialog</a>
+        <a href="#" id="console">test console</a>
+        <a href="#" id="request">test request</a>
+        <a href="#" id="request-jsonp">test request jsonp</a>
+    </div>
+    <form action="#" method="post" enctype="multipart/form-data">
+        <div><label for="search">搜索名称</label><input type="text" name="search" id="search" /></div>
+        <div><label for="file">文件</label><input type="file" name="file" id="file" /></div>
+        <div><label for="file-multi">多文件</label><input type="file" name="file-multi" id="file-multi" multiple /></div>
+        <div><label>单选</label><input type="radio" name="radio" value="1"><input type="radio" name="radio" value="2"></div>
+        <div><label>多选</label><input type="checkbox" name="checkbox" value="1"><input type="checkbox" name="checkbox" value="2"></div>
+        <button type="submit">提交</button>
+    </form>
+    <div style="position: relative;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;">
+        </div>
+        <a href="#" id="console-cover">test console cover</a>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('dialog').onclick=function(e) {
+            e.preventDefault();
+            alert('botphus dialog');
+        }
+        document.getElementById('console').onclick=function(e) {
+            console.log('botphus console');
+        }
+        document.getElementById('request').onclick=function(e) {
+            const ajax = fetch('https://api.github.com/', {
+                mode: 'cors'
+            })
+            .then(response => response.json())
+            .then(res => {
+                console.log(res);
+            })
+            .catch(console.error);
+        }
+        document.getElementById('request-jsonp').onclick=function(e) {
+            const ajax = fetch('https://api.github.com/?callback=test', {
+                mode: 'cors'
+            })
+            .then(response => response.text())
+            .then(res => {
+                console.log(res);
+            })
+            .catch(console.error);
+        }
+        document.getElementById('console-cover').onclick=function(e) {
+            console.log('botphus console');
+        }
+    </script>
+</body>
+</html>
