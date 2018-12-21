@@ -12,7 +12,7 @@
     "build": "npm run lint && tsc",
     "commit": "npm run test",
     "test": "npm run build && npm run test:cover",
-    "test:unit": "mocha ./dist/test/",
+    "test:unit": "set BOTPHUS_CORE_NUMBER=1 && mocha ./dist/test/",
     "test:cover": "nyc --reporter=lcov npm run test:unit",
     "lint": "tslint -c tslint.json -p tsconfig.json"
   },
