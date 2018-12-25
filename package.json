@@ -18,7 +18,8 @@
   },
   "nyc": {
     "exclude": [
-      "dist/test/**"
+      "dist/test/**",
+      "**/task-cache/**"
     ]
   },
   "pre-commit": [
