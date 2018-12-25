@@ -1,19 +1,14 @@
-import * as cluster from 'cluster';
-import * as path from 'path';
-
-import {IProcessPoolMap, IProcessPoolWork, IProcessPoolWorkEvent} from '../../interfaces/process_pool';
-import {ITaskMessage} from '../../interfaces/task';
-import {MessageType} from '../../types/common';
-import {TaskMessage} from '../../types/task';
-
-import {PROCESS_POOL_SIZE} from '../../const';
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const cluster = require("cluster");
+const path = require("path");
+const common_1 = require("../../types/common");
+const const_1 = require("../../const");
 /**
  * Current worker count
  * @type {number}
  */
-let workerCount: number = 0;
-
+let workerCount = 0;
 if (cluster.isMaster) {
     // Use cluster.setupMaster insteadof cluster.isMaster
     // To resolve mocha test bug
@@ -21,22 +16,19 @@ if (cluster.isMaster) {
         exec: path.join(__dirname, 'worker.js')
     });
 }
-
 /**
  * Create-task work pool
  * @type {IProcessPoolMap}
  */
-const workerPoolMap: IProcessPoolMap = new Map<string, IProcessPoolWorkEvent<ITaskMessage>>();
-
-let workQueue: IProcessPoolWork[] = [];
-
+const workerPoolMap = new Map();
+let workQueue = [];
 /**
  * Handle worker exit event
  * @param {cluster.Worker} worker Worker
  * @param {number}         code   Process exit code
  * @param {string}         signal Process exit signal
  */
-function handleWorkerExit(worker: cluster.Worker, code: number, signal: string) {
+function handleWorkerExit(worker, code, signal) {
     global.console.warn(`worker ${worker.process.pid} died: ${code}-${signal || ''}`);
     // Reduce worker count
     workerCount--;
@@ -47,53 +39,50 @@ function handleWorkerExit(worker: cluster.Worker, code: number, signal: string) 
         register();
     }
 }
-
 /**
  * Handle worker receive message
  * @param {cluster.Worker} worker  Worker
  * @param {TaskMessage}    message Message data
  */
-function handleWorkerReceiveMessage(worker: cluster.Worker, message: TaskMessage<ITaskMessage>) {
+function handleWorkerReceiveMessage(worker, message) {
     const curEvent = workerPoolMap.get(worker.id.toString());
     const [err, data] = message;
     curEvent.emit('message', message);
     // If worker is error
     if (err) {
-        if (err.type !== MessageType.UNIT_RULE_EXEC_SKIP_ERROR) {
+        if (err.type !== common_1.MessageType.UNIT_RULE_EXEC_SKIP_ERROR) {
             destoryWorker(worker, 1);
         }
         return;
     }
     // If worker is end
     switch (data.type) {
-        case MessageType.TASK_END:
+        case common_1.MessageType.TASK_END:
             destoryWorker(worker, 0);
             dispatchWorks();
             return;
     }
 }
-
 /**
  * Destory worker in map & event listeners
  * @param {cluster.Worker} worker Worker
  * @param {number}         code   Exit code
  */
-function destoryWorker(worker: cluster.Worker, code: number): void {
+function destoryWorker(worker, code) {
     const workerId = worker.id.toString();
     const curEvent = workerPoolMap.get(workerId);
     curEvent.emit('exit', code);
     curEvent.removeAllListeners();
     workerPoolMap.delete(workerId);
 }
-
 /**
  * Dispatch work
  */
-function dispatchWorks(): void {
+function dispatchWorks() {
     if (workQueue.length === 0) {
         return;
     }
-    const idleWorkers: string[] = [];
+    const idleWorkers = [];
     // Get idle worker list
     for (const id in cluster.workers) {
         if (!workerPoolMap.has(id)) {
@@ -115,11 +104,10 @@ function dispatchWorks(): void {
         return false;
     });
 }
-
 /**
  * Register worker
  */
-export function register(): void {
+function register() {
     // If has workers, block it
     if (workerCount > 0) {
         return;
@@ -133,17 +121,17 @@ export function register(): void {
         cluster.on('message', handleWorkerReceiveMessage);
     }
     // Register process pool
-    for (let i = 0; i < PROCESS_POOL_SIZE; i++) {
+    for (let i = 0; i < const_1.PROCESS_POOL_SIZE; i++) {
         cluster.fork();
         workerCount++;
     }
     dispatchWorks();
 }
-
+exports.register = register;
 /**
  * Destroy all worker
  */
-export function destory(): Promise<void> {
+function destory() {
     cluster.removeAllListeners();
     return new Promise((resolve) => {
         cluster.disconnect(() => {
@@ -151,14 +139,15 @@ export function destory(): Promise<void> {
         });
     });
 }
-
+exports.destory = destory;
 /**
  * Add work
  * @param {IProcessPoolWork} workData Add work data
  */
-export function addWork(workData: IProcessPoolWork): void {
+function addWork(workData) {
     // Add work queue
     workQueue.push(workData);
     // Run work in next tick
     process.nextTick(dispatchWorks);
 }
+exports.addWork = addWork;

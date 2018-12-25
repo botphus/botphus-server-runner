@@ -1,23 +1,18 @@
-// Reset mocha run
-import * as CONST from './common/const';
-// import method from './method/';
+import method from './method/';
 import task from './task/';
-// import unit from './unit/';
+import unit from './unit/';
 
-import BotphusServerRunner from '../source/';
-// Create process pool
-const serverRunner: BotphusServerRunner = new BotphusServerRunner({
-    cachePath: CONST.CACHE_PATH
-});
+import {destoryPool} from '../source/';
 
 describe('Parse', () => {
     // public method
-    // method();
+    method();
     // Test Unit
-    // unit();
+    unit();
     // Test Task
     task();
-    after('Stop runner', () => {
-        return serverRunner.destory();
+    after('Stop runner', function() {
+        this.timeout(10000);
+        return destoryPool();
     });
 });

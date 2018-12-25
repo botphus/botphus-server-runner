@@ -62,7 +62,6 @@
     "@botphus/rule": "^0.1.0",
     "@types/ioredis": "^4.0.1",
     "@types/mysql": "^2.15.5",
-    "@types/node": "^10.9.4",
     "@types/puppeteer": "^1.6.2",
     "fs-extra": "^7.0.0",
     "handlebars": "^4.0.11",
@@ -70,7 +69,9 @@
     "ioredis": "^4.0.0",
     "js-beautify": "^1.8.6",
     "mysql": "^2.16.0",
+    "power-assert": "^1.6.1",
     "puppeteer": "^1.7.0",
-    "recursive-readdir": "^2.2.2"
+    "recursive-readdir": "^2.2.2",
+    "require-reload": "^0.2.2"
   }
 }

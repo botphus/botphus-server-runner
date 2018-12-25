@@ -8,7 +8,9 @@ export enum MessageType {
     TASK_RULES_CACHE_ERROR = 'TASK_RULES_CACHE_ERROR', // When run with task rule cache error
     // Unit Rule message
     UNIT_RULE_EXEC_ERROR = 'UNIT_RULE_EXEC_ERROR', // When unit rule exec failed
+    UNIT_RULE_EXEC_SKIP_ERROR = 'UNIT_RULE_EXEC_SKIP_ERROR', // When unit rule exec failed & skip it
     UNIT_RULE_ASSERT_ERROR = 'UNIT_RULE_ASSERT_ERROR', // When assert unit rule's result error
+    INIT_ERROR = 'INIT_ERROR', // When task file init failed
     // Puppter error
     PUPPTER_INIT_ERROR = 'PUPPTER_INIT_ERROR', // When puppter init failed
     // Task message

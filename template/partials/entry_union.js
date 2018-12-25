@@ -18,7 +18,7 @@ return new Promise(function(resolve, reject) {
                 err.index = '{{rule.index}}';
             }
             // Send error & don't reject
-            sendProcessMessage([commonLib.createErrorMessage(err, MessageType.UNIT_RULE_EXEC_ERROR)]);
+            taskLib.sendTaskMsg(commonLib.createErrorMessage(err, MessageType.UNIT_RULE_EXEC_SKIP_ERROR));
             resolve();
         });
     {{/if}}

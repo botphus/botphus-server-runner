@@ -1,10 +1,12 @@
 import {TaskRuleTypeItem} from '@botphus/rule';
 
 import {IBotphusRunnerConfig} from './interfaces/common';
+import {IProcessPoolWorkEvent} from './interfaces/process_pool';
+import {ITaskMessage, ITaskStartOption} from './interfaces/task';
 
 import {BOTPHUS_TMP_PATH} from './const';
 import {destory, register} from './lib/process_pool';
-import {createTask} from './lib/task';
+import {clearTask, createTask, removeTask, startTask} from './lib/task';
 
 /**
  * Botphus Core Task
@@ -30,12 +32,37 @@ class BotphusCore {
     public createTask(taskName: string, mtime: number, taskRules: TaskRuleTypeItem[]): Promise<string> {
         return createTask(taskName, mtime, taskRules, this.config);
     }
-    public destory(): Promise<void> {
-        return destory();
+    /**
+     * Remove task with taskNo
+     * @param  {string}        taskNo Task No
+     * @return {Promise<void>}        Promise with none
+     */
+    public removeTask(taskNo: string): Promise<void> {
+        return removeTask(taskNo, this.config);
+    }
+    /**
+     * Remove All Task Cache file
+     * @return {Promise<void>} Promise with none
+     */
+    public clearTask(): Promise<void> {
+        return clearTask(this.config);
+    }
+    /**
+     * Start task
+     * @param  {string}                taskNo      Task No
+     * @param  {string}                startPage   Task start page
+     * @param  {ITaskStartOption={}}   startOption Task start option
+     * @return {Promise<ChildProcess>}             Promise with task child process
+     */
+    public startTask(taskNo: string, startPage: string, startOption: ITaskStartOption = {}): Promise<IProcessPoolWorkEvent<ITaskMessage>> {
+        return startTask(taskNo, startPage, startOption, this.config);
     }
 }
 
 export default BotphusCore;
+
+export const destoryPool = destory;
+
 // export types
 export * from './types/common';
 export * from './types/task';

@@ -3,12 +3,14 @@ import * as fse from 'fs-extra';
 import * as path from 'path';
 
 import {IBotphusRunnerConfig} from '../../interfaces/common';
-import {ITaskErrorMessage, ITaskMessage} from '../../interfaces/task';
+import {IProcessPoolWorkEvent} from '../../interfaces/process_pool';
+import {ITaskErrorMessage, ITaskMessage, ITaskStartOption} from '../../interfaces/task';
 import {MessageType} from '../../types/common';
 import {TaskMessage} from '../../types/task';
 
-import {createErrorMessage, getTaskNoByTaskName} from '../common';
-import {checkCache, createCache} from './cache';
+import {createErrorMessage, ErrorMessage, getTaskNoByTaskName} from '../common';
+import {addWork, createEvent} from '../process_pool';
+import {checkCache, createCache, getCache} from './cache';
 
 const botphusRule = new BotphusRule();
 
@@ -64,6 +66,39 @@ export function removeTask(taskNo: string, config: IBotphusRunnerConfig): Promis
  */
 export function clearTask(config: IBotphusRunnerConfig): Promise<void> {
     return fse.emptyDir(path.join(config.cachePath, '/task-cache/'));
+}
+
+/**
+ * Start task
+ * @param  {string}                taskNo      Task No
+ * @param  {string}                startPage   Task start page
+ * @param  {ITaskStartOption}      startOption Task start option
+ * @param  {IBotphusConfig}        config      Botphus config
+ * @return {Promise<ChildProcess>}             Promise with task child process
+ */
+export function startTask(taskNo: string, startPage: string, startOption: ITaskStartOption, config: IBotphusRunnerConfig): Promise<IProcessPoolWorkEvent<ITaskMessage>> {
+    // Cache file path
+    const cacheFilePath: string = path.join(config.cachePath, '/task-cache/', taskNo + '.js');
+    return getCache(cacheFilePath)
+        .then((stats) => {
+            if (!stats) {
+                return Promise.reject(new ErrorMessage('Task cache is nonexistence', MessageType.TASK_RULES_CACHE_ERROR));
+            }
+            const curEvent = createEvent<ITaskMessage>();
+            // Add work
+            addWork({
+                event: curEvent,
+                workData: {
+                    cacheFilePath,
+                    config,
+                    startOption,
+                    startPage,
+                    taskNo,
+                    workType: 'runTask',
+                }
+            });
+            return Promise.resolve(curEvent);
+        });
 }
 
 /**

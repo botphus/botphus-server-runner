@@ -1,7 +1,7 @@
-import {ITaskErrorMessage} from '../interfaces/task';
+import {ITaskErrorMessage, ITaskMessage} from '../interfaces/task';
 
 /**
  * Task Message
  * @type {Array}
  */
-export type TaskMessage<T> = [ITaskErrorMessage, T];
+export type TaskMessage<T = ITaskMessage> = [ITaskErrorMessage, T];

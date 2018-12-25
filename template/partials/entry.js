@@ -9,12 +9,12 @@
     totalCase++;
     curOrder++;
     // Rule exec start notice
-    sendProcessMessage([null, {
+    taskLib.sendTaskMsg(null, {
         type: MessageType.TASK_UNIT_EXEC_START,
         index: '{{rule.index}}',
         order: curOrder,
         sendTime: new Date().getTime()
-    }]);
+    });
     {{!-- Start task unit --}}
     {{!-- TYPE_DATA --}}
     {{#if (eq rule.type 1)}}
@@ -44,7 +44,9 @@
     // Set assertion
     .then(function({{#if rule.assertionVarName}}{{rule.assertionVarName}}{{else}}data{{/if}}) {
         {{#each rule.assertion}}
-        if(!({{{this}}})) {
+        try {
+            assert({{{this}}});
+        } catch(e) {
             return Promise.reject(commonLib.createErrorMessage(new Error('Assert Failed:{{{replace this "'" "\'"}}}'), MessageType.UNIT_RULE_ASSERT_ERROR));
         }
         {{/each}}
@@ -62,12 +64,12 @@
     {{/if}}
     .then(function() {
         // Rule exec end notice
-        sendProcessMessage([null, {
+        taskLib.sendTaskMsg(null, {
             type: MessageType.TASK_UNIT_EXEC_END,
             index: '{{rule.index}}',
             order: curOrder,
             sendTime: new Date().getTime()
-        }]);
+        });
     })
     // Set err index
     .catch(function(err) {

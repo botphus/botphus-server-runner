@@ -9,7 +9,7 @@ import {ITaskMessage, ITaskStartOption} from './task';
  * Process work event
  * reset message & exit event
  */
-export interface IProcessPoolWorkEvent<T> extends EventEmitter {
+export interface IProcessPoolWorkEvent<T = ITaskMessage> extends EventEmitter {
     emit(event: 'message', message: TaskMessage<T>): any;
     emit(event: 'exit', code: number): any;
     on(event: 'message', listener: MessageListener<TaskMessage<T>>): this;
@@ -46,7 +46,7 @@ interface IProcessPoolWorkDataRun extends IProcessPoolWorkDataBase {
  * - key: Worker ID
  * - value: Current work event
  */
-export interface IProcessPoolMap extends Map<string, IProcessPoolWorkEvent<ITaskMessage>> {}
+export interface IProcessPoolMap extends Map<string, IProcessPoolWorkEvent> {}
 
 /**
  * Process pool work data
@@ -61,5 +61,5 @@ export interface IProcessPoolWork {
     // Work Data
     workData: IProcessPoolWorkData;
     // Event
-    event: IProcessPoolWorkEvent<ITaskMessage>;
+    event: IProcessPoolWorkEvent;
 }
