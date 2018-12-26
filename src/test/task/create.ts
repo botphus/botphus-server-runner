@@ -65,7 +65,7 @@ export default function() {
             ])
                 .then(() => {
                     const stats = fs.statSync(path.join(CONST.CACHE_PATH, '/task-cache/', getTaskNoByTaskName(taskName) + '.js'));
-                    assert(mtime < new Date(stats.mtime).getTime());
+                    assert(mtime <= new Date(stats.mtime).getTime());
                 });
         });
         it('createTask with children', () => {
