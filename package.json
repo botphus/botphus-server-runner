@@ -27,7 +27,6 @@
     ],
     "exclude": [
       "**/*.d.ts",
-      "dist/test/**",
       "**/task-cache/**"
     ],
     "extension": [

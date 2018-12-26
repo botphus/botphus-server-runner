@@ -41,8 +41,6 @@ export function createTask(taskName: string, mtime: number, taskRules: TaskRuleT
             return createCache(cacheFilePath, taskNo, taskRules)
                 .then(() => {
                     return taskNo;
-                }, (err) => { // Check render error
-                    return Promise.reject(createErrorMessage(err, MessageType.TASK_RULES_RENDER_ERROR));
                 });
         });
 }
