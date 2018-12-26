@@ -7,8 +7,8 @@ import * as CONST from '../common/const';
 
 import {getTaskNoByTaskName} from '../../source/lib/common';
 
-import BotphusCore from '../../source/';
-const botphusCore = new BotphusCore({
+import BotphusServerRunner from '../../source/';
+const serverRunner = new BotphusServerRunner({
     cachePath: CONST.CACHE_PATH
 });
 
@@ -16,7 +16,7 @@ export default function() {
     describe('Task#removeTask', () => {
         it('removeTask', (done) => {
             const taskName = 'test task';
-            botphusCore.removeTask(getTaskNoByTaskName(taskName))
+            serverRunner.removeTask(getTaskNoByTaskName(taskName))
                 .then(() => {
                     fs.readFileSync(join(CONST.CACHE_PATH, '/task-cache/', getTaskNoByTaskName(taskName) + '.js'));
                     done(new Error('Invalid expectation'));
@@ -24,7 +24,7 @@ export default function() {
                 .catch(() => done());
         });
         it('clearTask', () => {
-            return botphusCore.clearTask()
+            return serverRunner.clearTask()
                 .then(() => {
                     return new Promise((resolve, reject) => {
                         recursive(CONST.CACHE_PATH, (err, files) => {

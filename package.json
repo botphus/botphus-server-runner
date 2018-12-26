@@ -11,15 +11,30 @@
     "prepublish": "npm run test",
     "build": "npm run lint && tsc",
     "commit": "npm run test",
-    "test": "npm run build && npm run test:cover",
-    "test:unit": "set BOTPHUS_CORE_NUMBER=1 && mocha ./dist/test/",
+    "test": "npm run build && npm run test:cover && npm run test:dist",
+    "test:unit": "set BOTPHUS_CORE_NUMBER=1 && mocha --require ts-node/register ./src/test/index.test.ts",
     "test:cover": "nyc --reporter=lcov npm run test:unit",
+    "test:dist": "set BOTPHUS_CORE_NUMBER=1 && mocha --require intelli-espower-loader ./dist/test/index.test.js",
     "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "include": [
+      "src/source/**/*.ts",
+      "src/types/**"
+    ],
     "exclude": [
+      "**/*.d.ts",
       "dist/test/**",
       "**/task-cache/**"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "lcov"
     ]
   },
   "pre-commit": [
@@ -49,6 +64,7 @@
     "@types/handlebars": "^4.0.39",
     "@types/js-beautify": "^1.8.0",
     "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
     "@types/power-assert": "^1.5.0",
     "@types/recursive-readdir": "^2.2.0",
     "intelli-espower-loader": "^1.0.1",
@@ -56,6 +72,7 @@
     "nyc": "^13.0.1",
     "power-assert": "^1.6.0",
     "pre-commit": "^1.2.2",
+    "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2"
   },
@@ -70,7 +87,6 @@
     "ioredis": "^4.0.0",
     "js-beautify": "^1.8.6",
     "mysql": "^2.16.0",
-    "power-assert": "^1.6.1",
     "puppeteer": "^1.7.0",
     "recursive-readdir": "^2.2.2",
     "require-reload": "^0.2.2"

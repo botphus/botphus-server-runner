@@ -8,8 +8,8 @@ import {TaskMessage} from '../../source/types/task';
 
 import {getTaskNoByTaskName} from '../../source/lib/common';
 
-import BotphusCore from '../../source/';
-const botphusCore = new BotphusCore({
+import BotphusServerRunner from '../../source/';
+const serverRunner = new BotphusServerRunner({
     cachePath: CONST.CACHE_PATH
 });
 
@@ -18,7 +18,7 @@ export default function() {
         this.timeout(20000);
         it('startTask with fullList', () => {
             let curOrder = 0;
-            return botphusCore.startTask(getTaskNoByTaskName(CONST.TASK_FULL_NAME), CONST.NORMAL_PAGE_PATH, {
+            return serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_FULL_NAME), CONST.NORMAL_PAGE_PATH, {
                 mysqlOption: CONST.MYSQL_CONFIG,
                 puppeteerLaunchOption: CONST.PUPPETEER_LAUNCH_OPTION,
                 redisOption: CONST.REDIS_CONFIG,
@@ -72,7 +72,7 @@ export default function() {
                 5: true,
                 6: true
             };
-            return botphusCore.startTask(getTaskNoByTaskName(CONST.TASK_FULL_NAME), '', {
+            return serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_FULL_NAME), '', {
                 excludeOption,
                 puppeteerLaunchOption: CONST.PUPPETEER_LAUNCH_OPTION
             })
@@ -100,7 +100,7 @@ export default function() {
                 });
         });
         it('startTask with react rules', () => {
-            return botphusCore.startTask(getTaskNoByTaskName(CONST.TASK_REACT_NAME), CONST.REACT_PAGE_PATH, {
+            return serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_REACT_NAME), CONST.REACT_PAGE_PATH, {
                 puppeteerLaunchOption: CONST.PUPPETEER_REACT_LAUNCH_OPTION,
                 startPageOption: {
                     waitUntil: 'networkidle0'
@@ -130,7 +130,7 @@ export default function() {
                 });
         });
         it('startTask with union block rules', () => {
-            return botphusCore.startTask(getTaskNoByTaskName(CONST.TASK_UNION_BLOCK_NAME), CONST.REACT_PAGE_PATH, {
+            return serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_UNION_BLOCK_NAME), CONST.REACT_PAGE_PATH, {
                 puppeteerLaunchOption: CONST.PUPPETEER_REACT_LAUNCH_OPTION,
                 startPageOption: {
                     waitUntil: 'networkidle0'
@@ -161,7 +161,7 @@ export default function() {
                 });
         });
         it('startTask with union non-block rules', () => {
-            return botphusCore.startTask(getTaskNoByTaskName(CONST.TASK_UNION_NON_BLOCK_NAME), CONST.REACT_PAGE_PATH, {
+            return serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_UNION_NON_BLOCK_NAME), CONST.REACT_PAGE_PATH, {
                 puppeteerLaunchOption: CONST.PUPPETEER_REACT_LAUNCH_OPTION,
                 startPageOption: {
                     waitUntil: 'networkidle0'
@@ -194,7 +194,7 @@ export default function() {
                 });
         });
         it('startTask with wrong number', (done) => {
-            botphusCore.startTask(getTaskNoByTaskName(CONST.TASK_FULL_NAME) + '1', '')
+            serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_FULL_NAME) + '1', '')
                 .then(() => {
                     done(new Error('Invalid expectation'));
                 })

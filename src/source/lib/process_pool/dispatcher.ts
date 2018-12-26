@@ -18,7 +18,8 @@ if (cluster.isMaster) {
     // Use cluster.setupMaster insteadof cluster.isMaster
     // To resolve mocha test bug
     cluster.setupMaster({
-        exec: path.join(__dirname, 'worker.js')
+        // Replace worker.ts dir to worker.js dir
+        exec: path.join(__dirname.replace(/src/, 'dist'), 'worker.js')
     });
 }
 
