@@ -50,6 +50,30 @@ export default function() {
                             return reject(new Error('Error exit'));
                         });
                     }),
+                    // Task wrong
+                    serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_WRONG_NAME), '', {
+                        puppeteerLaunchOption: CONST.PUPPETEER_LAUNCH_OPTION
+                    })
+                    .then((wrongEvent) => {
+                        return new Promise((resolve, reject) => {
+                            wrongEvent.on('message', ([error]: TaskMessage) => {
+                                // If process has error message
+                                if (error) {
+                                    assert(error.type === MessageType.INIT_ERROR);
+                                    assert(error.stack);
+                                    return;
+                                }
+                            });
+                            // Listen exit wrong event
+                            wrongEvent.on('exit', (code) => {
+                                if (code === 0) {
+                                    return reject(new Error('Error exit'));
+                                }
+                                assert(serverRunnerEnd === true, 'Check server runner status');
+                                return resolve();
+                            });
+                        });
+                    }),
                     // Task 2
                     serverRunner2.startTask(getTaskNoByTaskName(CONST.TASK_REACT_NAME), CONST.REACT_PAGE_PATH, {
                         puppeteerLaunchOption: CONST.PUPPETEER_REACT_LAUNCH_OPTION,
@@ -75,7 +99,6 @@ export default function() {
                                     if (code === 0) {
                                         // Check previous runner's end status
                                         assert(serverRunnerEnd === true, 'Check server runner status');
-                                        serverRunnerEnd = true;
                                         return resolve();
                                     }
                                     return reject(new Error('Error exit'));
@@ -107,7 +130,6 @@ export default function() {
                                     if (code === 0) {
                                         // Check previous runner's end status
                                         assert(serverRunnerEnd === true, 'Check server runner status');
-                                        serverRunnerEnd = true;
                                         return resolve();
                                     }
                                     return reject(new Error('Error exit'));

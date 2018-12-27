@@ -30,6 +30,8 @@ export default function() {
                             if (error) {
                                 return assert(!error.stack);
                             }
+                            assert(typeof messageData.context === 'object');
+                            assert.deepStrictEqual(messageData.context, {});
                             assert(/^\d{13}$/.test(messageData.sendTime.toString()));
                             // Task start
                             if (messageData.type === MessageType.TASK_START) {
@@ -50,6 +52,57 @@ export default function() {
                             if (messageData.type === MessageType.TASK_END) {
                                 assert(messageData.index === 'end');
                                 assert(messageData.totalCase === CONST.TASK_FULL_LIST_CASE_COUNT);
+                            }
+                        });
+                        // Listen exit event
+                        event.on('exit', (code) => {
+                            if (code === 0) {
+                                return resolve();
+                            }
+                            return reject(new Error('Error exit'));
+                        });
+                    });
+                });
+        });
+        it('startTask with context list', () => {
+            let curOrder = 0;
+            return serverRunner.startTask(getTaskNoByTaskName(CONST.TASK_CONTEXT_NAME), CONST.NORMAL_PAGE_PATH, {
+                puppeteerLaunchOption: CONST.PUPPETEER_LAUNCH_OPTION,
+            })
+                .then((event) => {
+                    return new Promise((resolve, reject) => {
+                        event.on('message', ([error, messageData]: TaskMessage) => {
+                            // If process has error message
+                            if (error) {
+                                return assert(!error.stack);
+                            }
+                            assert(typeof messageData.context === 'object');
+                            if (messageData.index === '0' && messageData.type === MessageType.TASK_START) {
+                                assert.deepStrictEqual(messageData.context, {});
+                            }
+                            if (messageData.index === '1') {
+                                assert.notDeepStrictEqual(messageData.context, {});
+                            }
+                            assert(/^\d{13}$/.test(messageData.sendTime.toString()));
+                            // Task start
+                            if (messageData.type === MessageType.TASK_START) {
+                                assert(messageData.index === 'start');
+                            }
+                            // Task unit start & end
+                            if (messageData.type === MessageType.TASK_UNIT_EXEC_START) {
+                                curOrder++;
+                            }
+                            if (messageData.type === MessageType.TASK_UNIT_EXEC_START || messageData.type === MessageType.TASK_UNIT_EXEC_END) {
+                                assert(/^(\d+-)*\d+$/.test(messageData.index));
+                                assert(messageData.order === curOrder);
+                            }
+                            if (messageData.type === MessageType.TASK_UNIT_EXEC_DATA_RECEIVE) {
+                                assert(messageData.data);
+                            }
+                            // Task End
+                            if (messageData.type === MessageType.TASK_END) {
+                                assert(messageData.index === 'end');
+                                assert(messageData.totalCase === CONST.TASK_CONTEXT_CASE_COUNT);
                             }
                         });
                         // Listen exit event

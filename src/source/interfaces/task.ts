@@ -32,8 +32,9 @@ export type ITaskMessage = ITaskUnitMessage | ITaskStartMessage | ITaskEndMessag
 /**
  * Task message
  */
-interface ITaskMessageBase extends ITaskStartOption {
+interface ITaskMessageBase {
     index: string;
+    context: object;
     type: MessageType;
     sendTime: number;
 }

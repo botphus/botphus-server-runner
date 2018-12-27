@@ -62,6 +62,7 @@ function handleWorkerReceiveMessage(worker: cluster.Worker, message: TaskMessage
     if (err) {
         if (err.type !== MessageType.UNIT_RULE_EXEC_SKIP_ERROR) {
             destoryWorker(worker, 1);
+            dispatchWorks();
         }
         return;
     }

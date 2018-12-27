@@ -12,6 +12,7 @@
     taskLib.sendTaskMsg(null, {
         type: MessageType.TASK_UNIT_EXEC_START,
         index: '{{rule.index}}',
+        context: context,
         order: curOrder,
         sendTime: new Date().getTime()
     });
@@ -67,6 +68,7 @@
         taskLib.sendTaskMsg(null, {
             type: MessageType.TASK_UNIT_EXEC_END,
             index: '{{rule.index}}',
+            context: context,
             order: curOrder,
             sendTime: new Date().getTime()
         });

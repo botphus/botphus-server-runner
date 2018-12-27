@@ -394,6 +394,46 @@ export const TASK_FULL_LIST: TaskRuleTypeItem[] = [
     },
 ];
 
+export const TASK_CONTEXT_NAME = 'context task';
+export const TASK_CONTEXT_LIST: TaskRuleTypeItem[] = [
+    // goto
+    {
+        arguments: [NORMAL_PAGE_PATH.replace(/\\/g, '\\\\')],
+        assertion: [`context.selector = "${NORMAL_PAGE_SEARCH_SELECTOR}"`], // Inset context
+        subType: TaskTypePageSubType.SUB_TYPE_GOTO,
+        type: TaskType.TYPE_PAGE
+    },
+    /**
+     * Dom
+     */
+    // click
+    {
+        arguments: ['${selector}'],
+        subType: TaskTypeDomSubType.SUB_TYPE_CLICK,
+        type: TaskType.TYPE_DOM
+    },
+];
+
+export const TASK_WRONG_NAME = 'wrong task';
+export const TASK_WRONG_LIST: TaskRuleTypeItem[] = [
+    // goto
+    {
+        arguments: [NORMAL_PAGE_PATH.replace(/\\/g, '\\\\')],
+        assertion: [`context.selector = ${NORMAL_PAGE_SEARCH_SELECTOR}`], // Inset context
+        subType: TaskTypePageSubType.SUB_TYPE_GOTO,
+        type: TaskType.TYPE_PAGE
+    },
+    /**
+     * Dom
+     */
+    // click
+    {
+        arguments: ['${selector}'],
+        subType: TaskTypeDomSubType.SUB_TYPE_CLICK,
+        type: TaskType.TYPE_DOM
+    },
+];
+
 export const TASK_REACT_NAME = 'React task';
 export const TASK_REACT_LIST: TaskRuleTypeItem[] = [
     // console
@@ -531,5 +571,6 @@ function countListCase(list: TaskRuleTypeItem[]): number {
     return totalCount;
 }
 export const TASK_FULL_LIST_CASE_COUNT = countListCase(TASK_FULL_LIST);
+export const TASK_CONTEXT_CASE_COUNT = countListCase(TASK_CONTEXT_LIST);
 export const TASK_REACT_LIST_CASE_COUNT = countListCase(TASK_REACT_LIST);
 export const TASK_UNION_NON_BLOCK_CASE_COUNT = countListCase(TASK_UNION_NON_BLOCK_LIST);

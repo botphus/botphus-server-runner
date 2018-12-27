@@ -1,5 +1,7 @@
 const path = require('path');
-const puppeteer = require(path.join(process.cwd(), '/node_modules/puppeteer/'));
+const processPath = process.cwd();
+const puppeteer = require(path.join(processPath, '/node_modules/puppeteer/'));
+const _ = require(path.join(processPath, '/node_modules/lodash/'));
 const assert = require('assert');
 
 // message type
@@ -14,6 +16,8 @@ const mysqlLib = require(path.join('{{libPath}}', '/dist/source/lib/connection/m
 const redisLib = require(path.join('{{libPath}}', '/dist/source/lib/connection/redis'));
 
 module.exports = function(env) {
+    // Init context
+    const context = {};
     // Init process parmas
     const puppeteerLaunchOption = env.startOption.puppeteerLaunchOption || null;
     const mysqlOption = env.startOption.mysqlOption || null;
@@ -60,6 +64,7 @@ module.exports = function(env) {
     taskLib.sendTaskMsg(null, {
         type: MessageType.TASK_START,
         index: 'start',
+        context: context,
         puppeteerLaunchOption: puppeteerLaunchOption,
         mysqlOption: mysqlOption,
         redisOption: redisOption,
@@ -86,6 +91,7 @@ module.exports = function(env) {
                     taskLib.sendTaskMsg(null, {
                         type: MessageType.TASK_END,
                         index: 'end',
+                        context: context,
                         totalCase: totalCase,
                         sendTime: new Date().getTime()
                     });

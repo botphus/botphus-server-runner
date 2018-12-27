@@ -94,6 +94,20 @@ export default function() {
                 })
                 .catch(done);
         });
+        it('createTask with context rules', (done) => {
+            serverRunner.createTask(CONST.TASK_CONTEXT_NAME, new Date().getTime(), CONST.TASK_CONTEXT_LIST)
+                .then(() => {
+                    done();
+                })
+                .catch(done);
+        });
+        it('createTask with wrong rules', (done) => {
+            serverRunner.createTask(CONST.TASK_WRONG_NAME, new Date().getTime(), CONST.TASK_WRONG_LIST)
+                .then(() => {
+                    done();
+                })
+                .catch(done);
+        });
         it('createTask with react rules', (done) => {
             serverRunner.createTask(CONST.TASK_REACT_NAME, new Date().getTime(), CONST.TASK_REACT_LIST)
                 .then(() => {

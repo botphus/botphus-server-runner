@@ -16,6 +16,36 @@ helpers({
     handlebars
 });
 
+// Replace context
+handlebars.registerHelper('replaceContext', (argStr: string, symbol: '`' | '\'' | '"' | '') => {
+    const matchList = argStr.match(/\$\{\w+\}/g);
+    if (!matchList) {
+        return argStr;
+    }
+    let startSymbol: string = '';
+    let endSymbol: string = '';
+    // switch symbol to change start
+    switch (symbol) {
+        case '`':
+            startSymbol = '${';
+            endSymbol = '}';
+            break;
+        case '\'':
+            startSymbol = '\' + ';
+            endSymbol = ' + \'';
+            break;
+        case '"':
+            startSymbol = '" + ';
+            endSymbol = ' + "';
+            break;
+    }
+    matchList.forEach((matchStr) => {
+        const matchPath = matchStr.replace(/^\$\{(\w+)\}$/, '$1');
+        argStr = argStr.replace(matchStr, startSymbol + `_.get(context, '${matchPath}', '')` + endSymbol);
+    });
+    return argStr;
+});
+
 /**
  * Register Partials from dir path
  * @param {string} dir Directory Path
