@@ -66,10 +66,11 @@ export default function() {
                             });
                             // Listen exit wrong event
                             wrongEvent.on('exit', (code) => {
+                                // Check previous runner's end status
+                                assert(serverRunnerEnd === true, 'Check server runner status');
                                 if (code === 0) {
                                     return reject(new Error('Error exit'));
                                 }
-                                assert(serverRunnerEnd === true, 'Check server runner status');
                                 return resolve();
                             });
                         });
@@ -96,9 +97,9 @@ export default function() {
                                 });
                                 // Listen exit event
                                 newEvent.on('exit', (code) => {
+                                    // Check previous runner's end status
+                                    assert(serverRunnerEnd === true, 'Check server runner status');
                                     if (code === 0) {
-                                        // Check previous runner's end status
-                                        assert(serverRunnerEnd === true, 'Check server runner status');
                                         return resolve();
                                     }
                                     return reject(new Error('Error exit'));
@@ -127,9 +128,9 @@ export default function() {
                                 });
                                 // Listen exit event
                                 newEvent.on('exit', (code) => {
+                                    // Check previous runner's end status
+                                    assert(serverRunnerEnd === true, 'Check server runner status');
                                     if (code === 0) {
-                                        // Check previous runner's end status
-                                        assert(serverRunnerEnd === true, 'Check server runner status');
                                         return resolve();
                                     }
                                     return reject(new Error('Error exit'));
