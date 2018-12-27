@@ -9,9 +9,9 @@ import {destory, register} from './lib/process_pool';
 import {clearTask, createTask, removeTask, startTask} from './lib/task';
 
 /**
- * Botphus Core Task
+ * Botphus Server runner
  */
-class BotphusCore {
+export default class BotphusServerRunner {
     private config: IBotphusRunnerConfig; // Basic Config
     constructor(customConfig?: IBotphusRunnerConfig) {
         // Update basic config
@@ -58,8 +58,6 @@ class BotphusCore {
         return startTask(taskNo, startPage, startOption, this.config);
     }
 }
-
-export default BotphusCore;
 
 export const destoryPool = destory;
 
