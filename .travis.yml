@@ -1,0 +1,30 @@
+sudo: false
+language: node_js
+
+## Cache node_modules 
+cache:
+  directories:
+    - "node_modules"
+
+## Set ubuntu trusty
+dist: trusty
+
+## Set nodejs version
+node_js:
+  - 6
+  - 8
+  - stable
+
+## Set mysql & redis
+services:
+  - mysql
+  - redis-server
+
+before_install:
+  ## Create datebase
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS botphus_test;'
+
+script: npm run test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

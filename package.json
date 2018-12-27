@@ -1,0 +1,95 @@
+{
+  "name": "@botphus/server-runner",
+  "version": "0.1.0",
+  "description": "Botphus server runner by NodeJS",
+  "main": "dist/source/index.js",
+  "types": "src/source/index.d.ts",
+  "directories": {
+    "test": "dist/test/"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run test",
+    "build": "npm run lint && tsc",
+    "commit": "npm run test",
+    "test": "npm run build && npm run test:cover && npm run test:dist",
+    "test:unit": "mocha --require ts-node/register ./src/test/index.test.ts",
+    "test:cover": "nyc --reporter=lcov npm run test:unit",
+    "test:dist": "mocha --require intelli-espower-loader ./dist/test/index.test.js",
+    "lint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "include": [
+      "src/source/**/*.ts",
+      "src/types/**"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/task-cache/**"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "lcov"
+    ]
+  },
+  "pre-commit": [
+    "commit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/botphus/botphus-server-runner.git"
+  },
+  "keywords": [
+    "botphus",
+    "test",
+    "QTP",
+    "puppeteer"
+  ],
+  "author": "bakajinsei <cqggff@live.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/botphus/botphus-server-runner/issues"
+  },
+  "homepage": "http://www.botphus.org/",
+  "engines": {
+    "node": ">=6.4.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/handlebars": "^4.0.39",
+    "@types/js-beautify": "^1.8.0",
+    "@types/lodash": "^4.14.119",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "@types/power-assert": "^1.5.0",
+    "@types/recursive-readdir": "^2.2.0",
+    "intelli-espower-loader": "^1.0.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
+    "power-assert": "^1.6.0",
+    "pre-commit": "^1.2.2",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "@botphus/rule": "^0.1.0",
+    "@types/ioredis": "^4.0.1",
+    "@types/mysql": "^2.15.5",
+    "@types/puppeteer": "^1.6.2",
+    "fs-extra": "^7.0.0",
+    "handlebars": "^4.0.11",
+    "handlebars-helpers": "^0.10.0",
+    "ioredis": "^4.0.0",
+    "js-beautify": "^1.8.6",
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0",
+    "puppeteer": "^1.7.0",
+    "recursive-readdir": "^2.2.2",
+    "require-reload": "^0.2.2"
+  }
+}
