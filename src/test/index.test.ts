@@ -1,3 +1,6 @@
+// Set BOTPHUS_CORE_NUMBER
+process.env.BOTPHUS_CORE_NUMBER = '1';
+
 import method from './method/';
 import task from './task/';
 import unit from './unit/';
