@@ -8,7 +8,7 @@ return unitLib.dom.setAttr(page, '{{{replaceContext (replace rule.arguments.[0] 
 {{/if}}
 {{!-- SUB_TYPE_GET_ATTR --}}
 {{#if (eq rule.subType 202)}}
-return unitLib.dom.getAttr(page, '{{{replaceContext (replace rule.arguments.[0] "'" "\'") '\''}}}', '{{{replaceContext (replace rule.arguments.[1] "'" "\'" '\'')}}}')
+return unitLib.dom.getAttr(page, '{{{replaceContext (replace rule.arguments.[0] "'" "\'") '\''}}}', '{{{replaceContext (replace rule.arguments.[1] "'" "\'") '\''}}}')
 {{> data_send rule=this}}
 {{/if}}
 {{!-- SUB_TYPE_GET_HTML --}}
