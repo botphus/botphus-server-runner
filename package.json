@@ -1,6 +1,6 @@
 {
   "name": "@botphus/server-runner",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Botphus server runner by NodeJS",
   "main": "dist/source/index.js",
   "types": "src/source/index.d.ts",
