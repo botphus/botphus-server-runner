@@ -47,17 +47,23 @@ module.exports = function(env) {
         const promiseList = [];
         if(browser) promiseList.push(browser.close());
         // Throw error message
-        if(mysqlConnectionNo) promiseList.push(new Promise(function(resolve) {
-            mysqlLib.mysqlConnectionCache[mysqlConnectionNo].end(function() {
-                resolve();
-            });
-        }));
-        if(redisConnectionNo) promiseList.push(redisLib.redisConnectionCache[redisConnectionNo].quit()
-            // Throw error message
-            .catch(function() {
-                return Promise.resolve();
-            })
-        );
+        if(mysqlConnectionNo) {
+            promiseList.push(new Promise(function(resolve) {
+                mysqlLib.mysqlConnectionCache[mysqlConnectionNo].end(function() {
+                    resolve();
+                });
+            }));
+            mysqlLib.mysqlConnectionCache[mysqlConnectionNo] = null;
+        }
+        if(redisConnectionNo) {
+            promiseList.push(redisLib.redisConnectionCache[redisConnectionNo].quit()
+                // Throw error message
+                .catch(function() {
+                    return Promise.resolve();
+                })
+            );
+            redisLib.redisConnectionCache[redisConnectionNo] = null;
+        }
         return Promise.all(promiseList);
     }
 

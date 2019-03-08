@@ -1,6 +1,6 @@
 {
   "name": "@botphus/server-runner",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Botphus server runner by NodeJS",
   "main": "dist/source/index.js",
   "types": "src/source/index.d.ts",
@@ -56,7 +56,7 @@
   },
   "homepage": "http://www.botphus.org/",
   "engines": {
-    "node": ">=6.4.0"
+    "node": ">=8.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.4",

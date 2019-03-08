@@ -9,7 +9,7 @@
 [travis-url]: https://travis-ci.org/botphus/botphus-server-runner
 [codecov-image]: https://img.shields.io/codecov/c/github/botphus/botphus-server-runner/master.svg?style=flat-square
 [codecov-url]: https://codecov.io/github/botphus/botphus-server-runner?branch=master
-[node-image]: https://img.shields.io/badge/node.js-%3E=_6-green.svg?style=flat-square
+[node-image]: https://img.shields.io/badge/node.js-%3E=_8-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 
 ## 功能特性
